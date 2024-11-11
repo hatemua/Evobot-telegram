@@ -1,28 +1,31 @@
 const TelegramBot = require("node-telegram-bot-api");
 const config = require("./config/config");
 const { handleStart } = require("./commands/start");
-const { handleMenu } = require("./commands/menu");
-const { handleLinkWallet } = require("./commands/linkWallet");
-const { handleCheckEvolution } = require("./commands/checkEvolution");
-const { handleTriggerAction } = require("./commands/triggerAction");
-const { handleWithdraw } = require("./commands/withdraw");
+const { handleMenu, showUserMenu } = require("./commands/menu");
 const { connectToDatabase } = require("./config/database");
 const { handleCreateWallet } = require("./commands/createWallet");
 const {
   handleVisualizeNFT,
   handleSendMassa,
   handleReceiveMassa,
-  handleBuyCameleon,
   handleSendMassaManual,
   handleSendMassaQr,
   handleCheckBalance,
+  handleVisualizeEvobots,
+  handleVisualizeCameleonz,
+  handleWithdraw,
 } = require("./commands/actions");
+const { handleHelp } = require("./commands/help");
+const { handleViewWallet } = require("./commands/viewWallet");
+const { setBotProfilePicture } = require("./services/botService");
 
 // Connect to the database
 connectToDatabase();
 
 // Initialize bot
 const bot = new TelegramBot(config.TELEGRAM_BOT_TOKEN, { polling: true });
+
+setBotProfilePicture(bot);
 
 // Register the /start command to show welcome message and "Start" button
 bot.onText(/\/start/, (msg) => handleStart(bot, msg));
@@ -40,6 +43,10 @@ bot.on("callback_query", (query) => {
     handleCreateWallet(bot, chatId);
   } else if (action === "visualize_nft") {
     handleVisualizeNFT(bot, chatId);
+  } else if (action === "visualize_evobots") {
+    handleVisualizeEvobots(bot, chatId);
+  } else if (action === "visualize_cameleonz") {
+    handleVisualizeCameleonz(bot, chatId);
   } else if (action === "send_massa") {
     handleSendMassa(bot, chatId);
   } else if (action === "receive_massa") {
@@ -50,10 +57,14 @@ bot.on("callback_query", (query) => {
     handleSendMassaManual(bot, chatId);
   } else if (action === "check_balance") {
     handleCheckBalance(bot, chatId);
-  } else if (action === "buy_cameleon") {
-    handleBuyCameleon(bot, chatId);
+  } else if (action === "view_wallet") {
+    handleViewWallet(bot, chatId);
+  } else if (action === "help") {
+    handleHelp(bot, query.message);
   } else if (action === "withdraw") {
     handleWithdraw(bot, chatId);
+  } else if (action === "back_to_menu") {
+    showUserMenu(bot, chatId); // Display the main menu
   }
 
   // Acknowledge the callback query

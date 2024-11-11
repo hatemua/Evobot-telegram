@@ -26,7 +26,6 @@ async function handleCreateWallet(bot, chatId) {
     // Will use the KeyPair to create a Provider
     const provider = Web3Provider.buildnet(keyPair);
 
-
     // Save wallet info to MongoDB
     const user = new User({
       telegramId: chatId,
@@ -36,11 +35,20 @@ async function handleCreateWallet(bot, chatId) {
     await user.save();
     console.log("User saved to database:", user);
 
+    const successMessage = `
+    🎉 *Congratulations! Your wallet has been created!*
+    
+    🔑 *Wallet Address*: \`${provider.account.address}\`
+    🗝️ *Private Key*: \`${provider.account.privateKey}\`
+    
+    *Important*: This wallet is internal ,Please make sure to save your private key securely! 🔒 It’s your access to your wallet, so keep it safe and never share it with anyone.
+    You can withdraw any funds that you have in it after using it 
+    
+    Thank you for joining the Evobot family! 🤖
+    `;
+
     // Send private key to the user
-    bot.sendMessage(
-      chatId,
-      `Wallet created!\n\nAddress: ${provider.account.address}\n\nPrivate Key: ${provider.account.privateKey}\n\nPlease save your private key securely.`
-    );
+    bot.sendMessage(chatId, successMessage);
 
     // Display menu options with an inline keyboard
     showUserMenu(bot, chatId);

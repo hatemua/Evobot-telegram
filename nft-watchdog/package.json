@@ -1,5 +1,5 @@
 {
-  "name": "evobots",
+  "name": "nft-watchdog",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -12,13 +12,9 @@
   "description": "",
   "dependencies": {
     "@massalabs/massa-web3": "^5.0.0",
-    "axios": "^1.7.7",
     "dotenv": "^16.4.5",
-    "jimp": "^1.6.0",
-    "mongoose": "^8.8.0",
-    "node-telegram-bot-api": "^0.66.0",
+    "mongoose": "^8.8.1",
     "nodemon": "^3.1.7",
-    "qrcode": "^1.5.4",
-    "qrcode-reader": "^1.0.4"
+    "uuid": "^11.0.3"
   }
 }

@@ -4,11 +4,146 @@ const User = require("../models/User");
 const QRCode = require("qrcode");
 const Jimp = require("jimp");
 const QrCodeReader = require("qrcode-reader");
-const { sendTransaction, getBalance } = require("../services/walletService");
+const {
+  sendTransaction,
+  getBalance,
+  getMyNfts,
+  getNfts,
+  mintCameleon,
+  transfer,
+} = require("../services/walletService");
 
 async function handleVisualizeNFT(bot, chatId) {
-  bot.sendMessage(chatId, "Visualizing your NFTs...");
-  // Add functionality to retrieve and display user's NFTs
+  const options = {
+    reply_markup: JSON.stringify({
+      inline_keyboard: [
+        [{ text: "🤖 Evobots", callback_data: "visualize_evobots" }],
+        [{ text: "🦎 Cameleonz", callback_data: "visualize_cameleonz" }],
+        [{ text: "🔙 Back to Menu", callback_data: "back_to_menu" }],
+      ],
+    }),
+  };
+
+  bot.sendMessage(
+    chatId,
+    "👀 Choose a collection to visualize and explore its NFTs:",
+    options
+  );
+}
+
+async function handleVisualizeEvobots(bot, chatId) {
+  try {
+    const user = await User.findOne({ telegramId: chatId });
+
+    if (!user) {
+      bot.sendMessage(
+        chatId,
+        "No account found. Please set up your account first.",
+        {
+          reply_markup: JSON.stringify({
+            inline_keyboard: [
+              [{ text: "🔙 Back to Menu", callback_data: "back_to_menu" }],
+            ],
+          }),
+        }
+      );
+      return;
+    }
+
+    const nftAddress = "AS12XKoY1zPdi7Pw94FPnyobV7z94twb2UrTJSARMHGQ46DB4r2fR"; // Smart contract address
+
+    const metadata = await getMyNfts(
+      nftAddress,
+      user.privateKey,
+      user.walletAddress
+    );
+
+    // Create the message to send to the user
+    const message = `Here is the NFT visualization feature:\n\n${metadata}\n\nSelect an option or go back to the menu.`;
+
+    // Options with "Back to Menu" button
+    const options = {
+      reply_markup: JSON.stringify({
+        inline_keyboard: [
+          [{ text: "🔙 Back to Menu", callback_data: "back_to_menu" }],
+        ],
+      }),
+    };
+
+    // Send the message to the user
+    bot.sendMessage(chatId, message, options);
+  } catch (error) {
+    console.error("Error retrieving NFT information:", error);
+    bot.sendMessage(
+      chatId,
+      "An error occurred while retrieving the NFT information. Please try again later.",
+      {
+        reply_markup: JSON.stringify({
+          inline_keyboard: [
+            [{ text: "🔙 Back to Menu", callback_data: "back_to_menu" }],
+          ],
+        }),
+      }
+    );
+  }
+}
+
+// Function to handle Cameleonz visualization (for now, just a placeholder message)
+async function handleVisualizeCameleonz(bot, chatId) {
+  try {
+    const user = await User.findOne({ telegramId: chatId });
+
+    if (!user) {
+      bot.sendMessage(
+        chatId,
+        "No account found. Please set up your account first.",
+        {
+          reply_markup: JSON.stringify({
+            inline_keyboard: [
+              [{ text: "🔙 Back to Menu", callback_data: "back_to_menu" }],
+            ],
+          }),
+        }
+      );
+      return;
+    }
+
+    const cameleonzAddress =
+      "AS12wiYn88sQZ2ugC5YRQT9QAvAzYVfBuTtZqmkb6F4Y5qh7ZNeyM"; // Smart contract address for Cameleonz
+
+    const metadata = await getNfts(
+      bot,
+      chatId,
+      cameleonzAddress,
+      user.privateKey,
+      user.walletAddress
+    );
+
+    const message = `Here is the NFT visualization feature for Cameleonz:\n\n${metadata}\n\nSelect an option or go back to the menu.`;
+
+    const options = {
+      reply_markup: JSON.stringify({
+        inline_keyboard: [
+          [{ text: "🔙 Back to Menu", callback_data: "back_to_menu" }],
+        ],
+      }),
+    };
+
+    bot.sendMessage(chatId, message, options);
+  } catch (error) {
+    console.error("Error retrieving NFT information:", error);
+    bot.sendMessage(
+      chatId,
+      "An error occurred while retrieving the NFT information. Please try again later.",
+      {
+        reply_markup: JSON.stringify({
+          inline_keyboard: [
+            [{ text: "🔙 Back to Menu", callback_data: "back_to_menu" }],
+          ],
+        }),
+      }
+    );
+  }
 }
 
 // Function to handle sending Massa
@@ -23,6 +158,7 @@ async function handleSendMassa(bot, chatId) {
             callback_data: "send_massa_manual",
           },
         ],
+        [{ text: "🔙 Back to Menu", callback_data: "back_to_menu" }],
       ],
     },
   };
@@ -38,7 +174,14 @@ async function handleSendMassa(bot, chatId) {
 async function handleSendMassaQr(bot, chatId) {
   bot.sendMessage(
     chatId,
-    "Please send me the QR code of the address you want to send Massa to."
+    "Please send me the QR code of the address you want to send Massa to.",
+    {
+      reply_markup: JSON.stringify({
+        inline_keyboard: [
+          [{ text: "🔙 Back to Menu", callback_data: "back_to_menu" }],
+        ],
+      }),
+    }
   );
 
   // Listen for a photo (QR code) sent by the user
@@ -143,13 +286,100 @@ async function handleReceiveMassa(bot, chatId) {
 }
 
 async function handleBuyCameleon(bot, chatId) {
-  bot.sendMessage(chatId, "Buying Cameleon...");
-  // Add functionality to buy Cameleon
+  // Fetch the user's wallet information from the database
+  const user = await User.findOne({ telegramId: chatId });
+  if (!user) {
+    bot.sendMessage(
+      chatId,
+      "⚠️ No wallet found. Please create a wallet first."
+    );
+    return;
+  }
+
+  const smartContractAddress =
+    "AS12wiYn88sQZ2ugC5YRQT9QAvAzYVfBuTtZqmkb6F4Y5qh7ZNeyM";
+
+  try {
+    // Call the mintCameleon function in the service layer
+    const operationId = await mintCameleon(
+      smartContractAddress,
+      user.privateKey,
+      user.walletAddress
+    );
+
+    // Construct a message with a link to the transaction explorer
+    const transactionLink = `https://www.massexplo.io/tx/${operationId}`;
+    const message = `🎉 Your mint transaction is pending! Track it [here](${transactionLink}).`;
+
+    // Send a message back to the user
+    bot.sendMessage(chatId, message, { parse_mode: "Markdown" });
+  } catch (error) {
+    console.error("Failed to mint Cameleon:", error);
+    bot.sendMessage(
+      chatId,
+      `❌ Failed to mint Cameleon. Error: ${error.message}`
+    );
+  }
 }
 
 async function handleWithdraw(bot, chatId) {
-  bot.sendMessage(chatId, "Please enter the amount to withdraw:");
-  // Add functionality to handle withdrawals
+  try {
+    // Step 1: Retrieve user's wallet details from the database
+    const user = await User.findOne({ telegramId: chatId });
+    if (!user) {
+      bot.sendMessage(chatId, "No wallet found. Please create a wallet first.");
+      return;
+    }
+
+    // Step 2: Prompt user for recipient address and token ID
+    bot.sendMessage(chatId, "Please enter the recipient's wallet address:");
+
+    // Wait for recipient address input
+    bot.once("message", async (msg) => {
+      const recipientAddress = msg.text;
+
+      // Prompt for token ID
+      bot.sendMessage(
+        chatId,
+        "Please enter the token ID you wish to transfer:"
+      );
+
+      // Wait for token ID input
+      bot.once("message", async (msg) => {
+        const tokenId = BigInt(msg.text); // Make sure to parse token ID as BigInt
+
+        try {
+          // Step 3: Call the transfer function
+          const transactionId = await transfer(
+            "AS12XKoY1zPdi7Pw94FPnyobV7z94twb2UrTJSARMHGQ46DB4r2fR", // Replace with actual smart contract address
+            user.privateKey,
+            user.walletAddress,
+            recipientAddress,
+            tokenId
+          );
+
+          // Step 4: Notify the user of successful transfer initiation
+          bot.sendMessage(
+            chatId,
+            `🎉 Transfer initiated! Transaction ID: ${transactionId}\nTrack your transaction on [Massa Explorer](https://www.massexplo.io/tx/${transactionId})`,
+            { parse_mode: "Markdown" }
+          );
+        } catch (error) {
+          console.error("Error in handleWithdraw:", error);
+          bot.sendMessage(
+            chatId,
+            "❌ Failed to initiate transfer. Please try again later."
+          );
+        }
+      });
+    });
+  } catch (error) {
+    console.error("Error in handleWithdraw:", error);
+    bot.sendMessage(
+      chatId,
+      "❌ An error occurred while processing your withdrawal request. Please try again later."
+    );
+  }
 }
 
 // Function to handle checking wallet balance
@@ -182,4 +412,6 @@ module.exports = {
   handleSendMassaQr,
   handleSendMassaManual,
   handleCheckBalance,
+  handleVisualizeEvobots,
+  handleVisualizeCameleonz,
 };
