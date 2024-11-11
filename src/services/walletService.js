@@ -106,8 +106,7 @@ async function getMyNfts(smartContractAddress, privateKey, address) {
           `🌐 Collection Address: ${nft.collectionAddress}\n` +
           `🏷️ Token Name: ${nft.tokenName}\n` +
           `📝 Description: ${nft.description}\n` +
-          `🖼️ Token Image: ${nft.imageURL}\n` +
-          `🔍 Attributes:\n${nft.attributes}\n`
+          `🖼️ Token Image: ${nft.imageURL}\n`
       )
       .join("\n------------------\n");
   } catch (error) {
