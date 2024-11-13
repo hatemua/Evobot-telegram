@@ -43,7 +43,7 @@ bot.on("callback_query", (query) => {
     handleCreateWallet(bot, chatId);
   } else if (action === "visualize_nft") {
     handleVisualizeNFT(bot, chatId);
-  } else if (action === "visualize_evobots" || action === "/visualize_cameleonz") {
+  } else if (action === "visualize_evobots" || action === "/visualize_evobots") {
     handleVisualizeEvobots(bot, chatId);
   } else if (action === "visualize_cameleonz") {
     handleVisualizeCameleonz(bot, chatId);
