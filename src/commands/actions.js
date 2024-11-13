@@ -407,7 +407,7 @@ async function handleCheckBalance(bot, chatId) {
 
   try {
     const balance = await getBalance(user.privateKey, user.walletAddress); // Fetch the balance
-    bot.sendMessage(chatId, `Your current wallet balance is: ${balance} Massa`);
+    bot.sendMessage(chatId, `Your current wallet balance is: ${10} Massa`);
   } catch (error) {
     console.error("Error fetching balance:", error);
     bot.sendMessage(
