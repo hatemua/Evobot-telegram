@@ -38,7 +38,7 @@ const privteKey = process.env.PRIVATE_KEY;
 //     console.log("step  1 ");
 //     const smartContract = new SmartContract(
 //       provider,
-//       "AS12XKoY1zPdi7Pw94FPnyobV7z94twb2UrTJSARMHGQ46DB4r2fR"
+//       "AS1ntvH7FXYSfJjvptVM2t4X1Y9DJmRF29V34CxbJNtJkhQkPnAB"
 //     );
 
 //     // Call the transfer function on the smart contract
@@ -146,7 +146,7 @@ async function evolveNFT(user, evolution, step, baseURI) {
 
     const smartContract = new SmartContract(
       provider,
-      "AS12oHCfezLwT3JNZPndJ33rjxPcQzPUca6KGs5BJUUrKcgCUG3g5"
+      "AS1hJWuchcrCHAen4LQRD8XFTukPVT8BWXxsd8Srbsbs3bK7AH9T"
     );
     console.log("evolutionID ", evolution.evolutionId);
     console.log("step ", step);
@@ -234,7 +234,7 @@ async function evolveNFT2(user, evolution) {
 
     const smartContract = new SmartContract(
       provider,
-      "AS12XKoY1zPdi7Pw94FPnyobV7z94twb2UrTJSARMHGQ46DB4r2fR"
+      "AS1ntvH7FXYSfJjvptVM2t4X1Y9DJmRF29V34CxbJNtJkhQkPnAB"
     );
 
     const args = new Args()

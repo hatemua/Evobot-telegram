@@ -52,7 +52,7 @@ async function handleVisualizeEvobots(bot, chatId) {
       return;
     }
 
-    const nftAddress = "AS12XKoY1zPdi7Pw94FPnyobV7z94twb2UrTJSARMHGQ46DB4r2fR"; // Smart contract address
+    const nftAddress = "AS1ntvH7FXYSfJjvptVM2t4X1Y9DJmRF29V34CxbJNtJkhQkPnAB"; // Smart contract address
 
     const metadata = await getMyNfts(
       nftAddress,
@@ -244,7 +244,10 @@ async function promptAmountAndSend(bot, chatId, recipientAddress) {
       // Send the transaction using the user's private key
       try {
         await sendTransaction(user.privateKey, recipientAddress, amount);
-        const evo = await EvolutionHistory.findOne({ userId: user._id,step:"4"});
+        const evo = await EvolutionHistory.findOne({
+          userId: user._id,
+          step: "4",
+        });
         evo.transaction = true;
         await evo.save();
         bot.sendMessage(
@@ -360,7 +363,7 @@ async function handleWithdraw(bot, chatId) {
         try {
           // Step 3: Call the transfer function
           const transactionId = await transfer(
-            "AS12XKoY1zPdi7Pw94FPnyobV7z94twb2UrTJSARMHGQ46DB4r2fR", // Replace with actual smart contract address
+            "AS1ntvH7FXYSfJjvptVM2t4X1Y9DJmRF29V34CxbJNtJkhQkPnAB", // Replace with actual smart contract address
             user.privateKey,
             user.walletAddress,
             recipientAddress,
