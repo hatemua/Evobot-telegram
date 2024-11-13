@@ -43,7 +43,7 @@ bot.on("callback_query", (query) => {
     handleCreateWallet(bot, chatId);
   } else if (action === "visualize_nft") {
     handleVisualizeNFT(bot, chatId);
-  } else if (action === "visualize_evobots") {
+  } else if (action === "visualize_evobots" || action === "/visualize_cameleonz") {
     handleVisualizeEvobots(bot, chatId);
   } else if (action === "visualize_cameleonz") {
     handleVisualizeCameleonz(bot, chatId);
@@ -63,7 +63,7 @@ bot.on("callback_query", (query) => {
     handleHelp(bot, query.message);
   } else if (action === "withdraw") {
     handleWithdraw(bot, chatId);
-  } else if (action === "back_to_menu") {
+  } else if (action === "back_to_menu" || action === "/back_to_main_menu") {
     showUserMenu(bot, chatId); // Display the main menu
   }
 
