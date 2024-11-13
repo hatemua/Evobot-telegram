@@ -108,7 +108,8 @@ async function handleCreateWallet(bot, chatId) {
         // Check if the NFT is owned by the specified address
         const ownerResult = await smartContract.read("ownerOf", tokenIdArgs);
         const ownerAddress = bytesToStr(ownerResult.value);
-
+        console.log("owner : ",ownerAddress)
+        console.log("user : ",user.walletAddress.toString())
         if (ownerAddress.toString() === user.walletAddress.toString()) {
           console.log("This is the id of my NFT", i);
 
