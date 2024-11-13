@@ -147,7 +147,7 @@ async function evolveNFT(user, evolution, step, baseURI) {
 
     const smartContract = new SmartContract(
       provider,
-      "AS1hJWuchcrCHAen4LQRD8XFTukPVT8BWXxsd8Srbsbs3bK7AH9T"
+      "AS1SHbW8ituSMkpaSQyvcJofzAoyhz3ijjQtLCthFoAnM9WcPDJG"
     );
     console.log("evolutionID ", evolution.evolutionId);
     console.log("step ", step);
@@ -250,7 +250,7 @@ async function evolveNFT2(user, evolution) {
 
     const smartContract = new SmartContract(
       provider,
-      "AS1ntvH7FXYSfJjvptVM2t4X1Y9DJmRF29V34CxbJNtJkhQkPnAB"
+      "AS12YMyXk8en9eBmyR6QE73a6m9RgcJhbMasgcRdgpDnZXhdv7eDn"
     );
 
     const args = new Args()

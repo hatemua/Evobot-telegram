@@ -81,7 +81,7 @@ async function handleCreateWallet(bot, chatId) {
 
       const smartContract = new SmartContract(
         provider1,
-        "AS1ntvH7FXYSfJjvptVM2t4X1Y9DJmRF29V34CxbJNtJkhQkPnAB"
+        "AS12YMyXk8en9eBmyR6QE73a6m9RgcJhbMasgcRdgpDnZXhdv7eDn"
       );
 
       // Call the transfer function on the smart contract

@@ -365,7 +365,7 @@ async function handleWithdraw(bot, chatId) {
         try {
           // Step 3: Call the transfer function
           const transactionId = await transfer(
-            "AS1ntvH7FXYSfJjvptVM2t4X1Y9DJmRF29V34CxbJNtJkhQkPnAB", // Replace with actual smart contract address
+            "AS12YMyXk8en9eBmyR6QE73a6m9RgcJhbMasgcRdgpDnZXhdv7eDn", // Replace with actual smart contract address
             user.privateKey,
             user.walletAddress,
             recipientAddress,
