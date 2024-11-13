@@ -321,18 +321,20 @@ async function checkEvolutions() {
       ); // Second evolution after 12 minutes
       console.log("Second evolution after 16 minutes");
     } else if (timeSinceMint >= 6 && timeSinceMint < 8) {
-      const evolution = await EvolutionHistory.findOne({
-        userId: user.id,
-        step: "4",
-        transaction: true,
-      });
-      await evolveNFT(
-        user,
-        evolution,
-        4,
-        "https://gold-hilarious-platypus-698.mypinata.cloud/ipfs/QmZYSVuevQCfXmgLDC3pUVCpnYnKHeKCmRZZmURkuXbcAr"
-      ); // Second evolution after 12 minutes
-      console.log("Second evolution after 18 minutes");
+      if (user.transactionSended == true) {
+        const evolution = await EvolutionHistory.findOne({
+          userId: user.id,
+          step: "4",
+        });
+        await evolveNFT(
+          user,
+          evolution,
+          4,
+          "https://gold-hilarious-platypus-698.mypinata.cloud/ipfs/QmZYSVuevQCfXmgLDC3pUVCpnYnKHeKCmRZZmURkuXbcAr"
+        ); // Second evolution after 12 minutes
+        console.log("Second evolution after 18 minutes");
+      }
+     
     }
   }
 }

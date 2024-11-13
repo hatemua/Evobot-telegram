@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema({
   nftMinted: { type: Boolean, default: false },
   mintDate: { type: Date },
   tokenId: { type: Number },
+  transactionSended : { type: Boolean, default: false }
 });
 
 module.exports = mongoose.model("User", userSchema);

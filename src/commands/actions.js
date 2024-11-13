@@ -249,12 +249,12 @@ async function promptAmountAndSend(bot, chatId, recipientAddress) {
       try {
         
         await sendTransaction(privKey, recipientAddress, amount);
-        const evo = await EvolutionHistory.findOne({
-          userId: user._id,
-          step: "4",
+        const user = await User.findOne({
+          _id: user._id,
+          
         });
-        evo.transaction = true;
-        await evo.save();
+        user.transactionSended = true;
+        await user.save();
         bot.sendMessage(
           chatId,
           `Successfully sent ${amount} Massa to ${recipientAddress}.`
