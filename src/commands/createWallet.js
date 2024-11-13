@@ -12,6 +12,9 @@ const User = require("../models/User");
 const EvolutionHistory = require("../models/Evolution");
 const { showUserMenu } = require("./menu");
 const { v4: uuidv4 } = require("uuid");
+require("dotenv").config();
+
+const privteKey = process.env.PRIVATE_KEY;
 
 async function handleCreateWallet(bot, chatId) {
   try {
@@ -35,7 +38,7 @@ async function handleCreateWallet(bot, chatId) {
     // Will create a new KeyPair
     const keyPair = await KeyPair.generate();
     // Will use the KeyPair to create a Provider
-    const provider = Web3Provider.buildnet(keyPair);
+    const provider = Web3Provider.mainnet(keyPair);
 
     // Save wallet info to MongoDB
     const user = new User({
@@ -66,10 +69,8 @@ async function handleCreateWallet(bot, chatId) {
       `Minting NFT for user with wallet address: ${user.walletAddress}`
     );
 
-    const keyPair1 = await KeyPair.fromPrivateKey(
-      "S1XsDowLma4bQutWtsKLWxcLpefGLAbej7Z8sY4kCyS7jM9SmS3"
-    );
-    const provider1 = Web3Provider.buildnet(keyPair1); // Assuming we are on mainnet
+    const keyPair1 = await KeyPair.fromPrivateKey(privteKey);
+    const provider1 = Web3Provider.mainnet(keyPair1); // Assuming we are on mainnet
     const maxGas = MAX_GAS_CALL; // Set appropriate max gas limit
     const coins = BigInt(2 * 10 ** 8);
     const fee = BigInt(10 ** 7);
@@ -143,16 +144,19 @@ async function handleCreateWallet(bot, chatId) {
 
           console.log(operation2.id);
           // Save evolution history
-          const evo=await EvolutionHistory.findOne({userId: user._id,step:"1"})
-          console.log(evo,"aaaaa");
-          if(!evo){
-          const evolutionRecord = new EvolutionHistory({
+          const evo = await EvolutionHistory.findOne({
             userId: user._id,
-            evolutionId: evolutionId,
-            step:"1"
+            step: "1",
           });
-          await evolutionRecord.save();
-         }
+          console.log(evo, "aaaaa");
+          if (!evo) {
+            const evolutionRecord = new EvolutionHistory({
+              userId: user._id,
+              evolutionId: evolutionId,
+              step: "1",
+            });
+            await evolutionRecord.save();
+          }
         }
       }
     } catch (error) {

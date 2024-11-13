@@ -11,7 +11,7 @@ const {
 } = require("@massalabs/massa-web3");
 async function sendTransaction(privateKey, recipientAddress, amount) {
   const keyPair = await KeyPair.fromPrivateKey(privateKey);
-  const provider = Web3Provider.buildnet(keyPair);
+  const provider = Web3Provider.mainnet(keyPair);
   try {
     const tx = await provider.transfer(
       recipientAddress,
@@ -21,7 +21,7 @@ async function sendTransaction(privateKey, recipientAddress, amount) {
 
     const status = await tx.getStatus();
     console.log(`Transaction successful: ${tx.id}`);
-    
+
     return tx.hash;
   } catch (error) {
     console.error("Error sending transaction:", error);
@@ -33,7 +33,7 @@ async function sendTransaction(privateKey, recipientAddress, amount) {
 async function getBalance(privateKey, address) {
   const keyPair = await KeyPair.fromPrivateKey(privateKey);
 
-  const provider = Web3Provider.buildnet(keyPair);
+  const provider = Web3Provider.mainnet(keyPair);
 
   try {
     const balance = await provider.balance(true);
@@ -48,7 +48,7 @@ async function getBalance(privateKey, address) {
 async function getMyNfts(smartContractAddress, privateKey, address) {
   // Initialize the key pair and provider
   const keyPair = await KeyPair.fromPrivateKey(privateKey);
-  const provider = Web3Provider.buildnet(keyPair);
+  const provider = Web3Provider.mainnet(keyPair);
 
   // Initialize the smart contract with the specified address
   const smartContract = new SmartContract(provider, smartContractAddress);
