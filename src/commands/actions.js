@@ -256,10 +256,7 @@ async function promptAmountAndSend(bot, chatId, recipientAddress) {
           chatId,
           `Successfully sent ${amount} Massa to ${recipientAddress}.`
         );
-        bot.sendMessage(
-          chatId,
-          `Successfully sent ${amount} Massa to ${recipientAddress}.`
-        );
+       
       } catch (error) {
         console.error("Error sending Massa:", error);
         bot.sendMessage(chatId, "Failed to send Massa. Please try again.");
