@@ -19,7 +19,7 @@ async function sendTransaction(privateKey, recipientAddress, amount) {
       parseMas("0.01")
     );
 
-    const status = await tx.getStatus();
+    // const status = await tx.getStatus();
     console.log(`Transaction successful: ${tx.id}`);
 
     return tx.hash;
