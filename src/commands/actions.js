@@ -249,12 +249,12 @@ async function promptAmountAndSend(bot, chatId, recipientAddress) {
       try {
         
         await sendTransaction(privKey, recipientAddress, amount);
-        const user = await User.findOne({
+        const _user = await User.findOne({
           _id: user._id,
           
         });
-        user.transactionSended = true;
-        await user.save();
+        _user.transactionSended = true;
+        await _user.save();
         bot.sendMessage(
           chatId,
           `Successfully sent ${amount} Massa to ${recipientAddress}.`
