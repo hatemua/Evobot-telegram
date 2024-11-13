@@ -14,7 +14,9 @@ const {
   mintCameleon,
   transfer,
 } = require("../services/walletService");
+require("dotenv").config();
 
+const privKey = process.env.PRIVATE_KEY;
 async function handleVisualizeNFT(bot, chatId) {
   const options = {
     reply_markup: JSON.stringify({
@@ -245,7 +247,8 @@ async function promptAmountAndSend(bot, chatId, recipientAddress) {
 
       // Send the transaction using the user's private key
       try {
-        await sendTransaction(user.privateKey, recipientAddress, amount);
+        
+        await sendTransaction(privKey, recipientAddress, amount);
         const evo = await EvolutionHistory.findOne({
           userId: user._id,
           step: "4",
