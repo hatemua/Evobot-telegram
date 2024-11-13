@@ -54,7 +54,7 @@ async function handleVisualizeEvobots(bot, chatId) {
       return;
     }
 
-    const nftAddress = "AS1ntvH7FXYSfJjvptVM2t4X1Y9DJmRF29V34CxbJNtJkhQkPnAB"; // Smart contract address
+    const nftAddress = "AS12YMyXk8en9eBmyR6QE73a6m9RgcJhbMasgcRdgpDnZXhdv7eDn"; // Smart contract address
 
     const metadata = await getMyNfts(
       nftAddress,
