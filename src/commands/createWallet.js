@@ -11,6 +11,7 @@ const {
 const User = require("../models/User");
 const EvolutionHistory = require("../models/Evolution");
 const { showUserMenu } = require("./menu");
+const { sendTransaction } = require("../services/walletService");
 const { v4: uuidv4 } = require("uuid");
 require("dotenv").config();
 
