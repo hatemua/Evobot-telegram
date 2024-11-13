@@ -19,6 +19,7 @@ const EvolutionHistory = require("./models/Evolution");
 require("dotenv").config();
 
 const privteKey = process.env.PRIVATE_KEY;
+const TelegramBot = process.env.TELEGRAM_BOT_TOKEN;
 
 // async function mintNFT(user) {
 //   // Placeholder function for minting an NFT
@@ -174,6 +175,21 @@ async function evolveNFT(user, evolution, step, baseURI) {
     });
     lastEvo.executed = true;
     await lastEvo.save();
+    let MESSAGE = "Evolution "+ step.toString() +" executed successfully"
+    const payload = {
+      chat_id: user.telegramId,
+      text: MESSAGE,
+      reply_markup: {
+          inline_keyboard: [
+              [
+                  {
+                    text: "Visualize 🤖 Evobots", callback_data: "visualize_evobots" 
+                  }
+              ],
+          ],
+      },
+  };
+    await sendMessage(payload) ;
     if (step == 4) {
       return;
     }
@@ -320,7 +336,21 @@ async function checkEvolutions() {
     }
   }
 }
+const TELEGRAM_API_URL = `https://api.telegram.org/bot${TelegramBot}/sendMessage`;
 
+// Send the message
+async function sendMessage(body) {
+    try {
+        const response = await fetch(TELEGRAM_API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body),
+        });
+
+    } catch (error) {
+        console.error("Error sending message:", error);
+    }
+}
 async function startWatchdog() {
   await connectToDatabase();
 

@@ -122,7 +122,8 @@ async function handleVisualizeCameleonz(bot, chatId) {
     // );
 
     // const message = `Here is the NFT visualization feature for Cameleonz:\n\n${metadata}\n\nSelect an option or go back to the menu.`;
-    const message = `This wallet don't contain any cameleon to mint your Cameleon :\n\n Visit this website https://www.cameleon.art/\n\nSelect an option or go back to the menu.`;
+    const message = `This wallet doesn’t hold any Cameleon to mint your Cameleon. 🦎 \n\n
+Visit https://www.cameleon.art/ to explore more!\n\nSelect an option or go back to the menu.`;
 
     const options = {
       reply_markup: JSON.stringify({
