@@ -29,7 +29,14 @@ setBotProfilePicture(bot);
 
 // Register the /start command to show welcome message and "Start" button
 bot.onText(/\/start/, (msg) => handleStart(bot, msg));
-
+bot.onText(/\/visualize_evobots/, (msg) => {
+  const chatId = query.message.chat.id;
+  handleVisualizeEvobots(bot, chatId)
+});
+bot.onText(/\/back_to_menu/, (msg) => {
+  const chatId = query.message.chat.id;
+  showUserMenu(bot, chatId);
+});
 // Handle callback queries for inline buttons
 bot.on("callback_query", (query) => {
   const chatId = query.message.chat.id;
@@ -43,7 +50,7 @@ bot.on("callback_query", (query) => {
     handleCreateWallet(bot, chatId);
   } else if (action === "visualize_nft") {
     handleVisualizeNFT(bot, chatId);
-  } else if (action === "visualize_evobots" || action === "/visualize_evobots") {
+  } else if (action === "visualize_evobots") {
     handleVisualizeEvobots(bot, chatId);
   } else if (action === "visualize_cameleonz") {
     handleVisualizeCameleonz(bot, chatId);
@@ -63,7 +70,7 @@ bot.on("callback_query", (query) => {
     handleHelp(bot, query.message);
   } else if (action === "withdraw") {
     handleWithdraw(bot, chatId);
-  } else if (action === "back_to_menu" || action === "/back_to_main_menu") {
+  } else if (action === "back_to_menu") {
     showUserMenu(bot, chatId); // Display the main menu
   }
 
