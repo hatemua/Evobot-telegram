@@ -177,25 +177,25 @@ async function evolveNFT(user, evolution, step, baseURI) {
     if (step == 4) {
       return;
     }
-    // const evolutionId = uuidv4();
+    const evolutionId = uuidv4();
 
-    // const args1 = new Args()
-    //   .addString(evolutionId)
-    //   .addU256(BigInt(user.tokenId))
-    //   .addU64(BigInt(Date.now() + 2 * 60 * 1000))
-    //   .addArray(
-    //     [
-    //       "image",
-    //       `${baseURI}/${user.tokenId}.png`,
-    //     ],
-    //     ArrayTypes.STRING
-    //   );
+    const args1 = new Args()
+      .addString(evolutionId)
+      .addU256(BigInt(user.tokenId))
+      .addU64(BigInt(Date.now() + 30 * 60 * 1000))
+      .addArray(
+        [
+          "image",
+          `${baseURI}/${user.tokenId}.png`,
+        ],
+        ArrayTypes.STRING
+      );
 
-    // const operation2 = await smartContract.call("addTimeEvolution", args1, {
-    //   coins: BigInt(4 * 10 ** 7),
-    //   fee,
-    //   maxGas,
-    // });
+    const operation2 = await smartContract.call("addTimeEvolution", args1, {
+      coins: BigInt(4 * 10 ** 7),
+      fee,
+      maxGas,
+    });
 
     // console.log(operation2.id,"add TimesEvolution");
     // console.log(baseURI,"baseURI");
