@@ -30,11 +30,11 @@ setBotProfilePicture(bot);
 // Register the /start command to show welcome message and "Start" button
 bot.onText(/\/start/, (msg) => handleStart(bot, msg));
 bot.onText(/\/visualize_evobots/, (msg) => {
-  const chatId = query.message.chat.id;
+  const chatId = msg.chat.id;
   handleVisualizeEvobots(bot, chatId)
 });
 bot.onText(/\/back_to_menu/, (msg) => {
-  const chatId = query.message.chat.id;
+  const chatId = msg.chat.id;
   showUserMenu(bot, chatId);
 });
 // Handle callback queries for inline buttons
