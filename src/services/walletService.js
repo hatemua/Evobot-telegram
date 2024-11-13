@@ -15,7 +15,7 @@ async function sendTransaction(privateKey, recipientAddress, amount) {
   try {
     const tx = await provider.transfer(
       recipientAddress,
-      parseMas("5"),
+      parseMas(amount),
       parseMas("0.01")
     );
 
