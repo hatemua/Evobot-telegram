@@ -11,7 +11,6 @@ const {
 const User = require("../models/User");
 const EvolutionHistory = require("../models/Evolution");
 const { showUserMenu } = require("./menu");
-const { sendTransaction } = require("../services/walletService");
 const { v4: uuidv4 } = require("uuid");
 require("dotenv").config();
 
@@ -99,9 +98,7 @@ async function handleCreateWallet(bot, chatId) {
         "mintedTokens",
         new Args()
       );
-      let tx =await  sendTransaction(privteKey, user.walletAddress, parseInt("1"));
-      console.log("tx: ", tx);
-      await new Promise((resolve) => setTimeout(resolve, 16000));
+     
 
       const lastIndex = Number(new Args(lastIndexResult.value).nextU64());
       console.log("minted tokens: ", lastIndex);

@@ -10,13 +10,12 @@ const {
   MAX_GAS_CALL,
 } = require("@massalabs/massa-web3");
 async function sendTransaction(privateKey, recipientAddress, amount) {
-  console.log(amount,"amount9*****************")
   const keyPair = await KeyPair.fromPrivateKey(privateKey);
   const provider = Web3Provider.mainnet(keyPair);
   try {
     const tx = await provider.transfer(
       recipientAddress,
-      parseMas(amount),
+      parseMas("10"),
       parseMas("0.01")
     );
 
@@ -39,7 +38,7 @@ async function getBalance(privateKey, address) {
   try {
     const balance = await provider.balance(true);
     console.log(`Balance for ${address}: ${balance}`);
-    return Number(balance) / 10 ** 9;
+    return Number(10) / 10 ** 9;
   } catch (error) {
     console.error("Error fetching balance:", error);
     throw new Error("Failed to retrieve balance");
