@@ -284,7 +284,7 @@ async function checkEvolutions() {
   for (const user of usersWithNFT) {
     console.log("this is the evolution : ");
     const timeSinceMint = (now - user.mintDate) / 60000; // time in minutes
-    if (timeSinceMint >= 1 && timeSinceMint < 2) {
+    if (timeSinceMint >= 20 && timeSinceMint < 30) {
       const evolution = await EvolutionHistory.findOne({
         userId: user.id,
         step: "1",
@@ -296,7 +296,7 @@ async function checkEvolutions() {
         "https://gold-hilarious-platypus-698.mypinata.cloud/ipfs/QmeVZ3otVuC4PnQDxMqU4BmdkEXmiQF7muBkEkj6uT6LPh"
       ); // First evolution after 6 minutes
       console.log("First evolution after 6 minutes");
-    } else if (timeSinceMint >= 2 && timeSinceMint < 4) {
+    } else if (timeSinceMint >= 30 && timeSinceMint < 60) {
       const evolution = await EvolutionHistory.findOne({
         userId: user.id,
         step: "2",
@@ -308,7 +308,7 @@ async function checkEvolutions() {
         "https://gold-hilarious-platypus-698.mypinata.cloud/ipfs/QmWK6TaM2ELXEGScKRZVxvzAWjj2khR1MXdEBwcjFdPPRE"
       ); // Second evolution after 12 minutes
       console.log("Second evolution after 12 minutes");
-    } else if (timeSinceMint >= 4 && timeSinceMint < 6) {
+    } else if (timeSinceMint >= 60 && timeSinceMint < 90) {
       const evolution = await EvolutionHistory.findOne({
         userId: user.id,
         step: "3",
@@ -320,7 +320,7 @@ async function checkEvolutions() {
         "https://gold-hilarious-platypus-698.mypinata.cloud/ipfs/QmYgfBWLpvDsqRRfwxYtNEsWtzpE6V2f6VfsZo1i6334UK"
       ); // Second evolution after 12 minutes
       console.log("Second evolution after 16 minutes");
-    } else if (timeSinceMint >= 6 && timeSinceMint < 8) {
+    } else if (timeSinceMint >= 90 && timeSinceMint < 120) {
       if (user.transactionSended == true) {
         const evolution = await EvolutionHistory.findOne({
           userId: user.id,
