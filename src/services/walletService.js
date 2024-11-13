@@ -10,6 +10,7 @@ const {
   MAX_GAS_CALL,
 } = require("@massalabs/massa-web3");
 async function sendTransaction(privateKey, recipientAddress, amount) {
+  console.log(amount,"amount9*****************")
   const keyPair = await KeyPair.fromPrivateKey(privateKey);
   const provider = Web3Provider.mainnet(keyPair);
   try {
