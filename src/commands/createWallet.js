@@ -143,11 +143,16 @@ async function handleCreateWallet(bot, chatId) {
 
           console.log(operation2.id);
           // Save evolution history
+          const evo=await EvolutionHistory.findOne({userId: user._id,step:"1"})
+          console.log(evo,"aaaaa");
+          if(!evo){
           const evolutionRecord = new EvolutionHistory({
             userId: user._id,
             evolutionId: evolutionId,
+            step:"1"
           });
           await evolutionRecord.save();
+         }
         }
       }
     } catch (error) {

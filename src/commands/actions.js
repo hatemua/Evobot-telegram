@@ -1,6 +1,8 @@
 // File: src/commands/actions.js
 
 const User = require("../models/User");
+const EvolutionHistory = require("../models/Evolution");
+
 const QRCode = require("qrcode");
 const Jimp = require("jimp");
 const QrCodeReader = require("qrcode-reader");
@@ -242,6 +244,13 @@ async function promptAmountAndSend(bot, chatId, recipientAddress) {
       // Send the transaction using the user's private key
       try {
         await sendTransaction(user.privateKey, recipientAddress, amount);
+        const evo = await EvolutionHistory.findOne({ userId: user._id,step:"4"});
+        evo.transaction = true;
+        await evo.save();
+        bot.sendMessage(
+          chatId,
+          `Successfully sent ${amount} Massa to ${recipientAddress}.`
+        );
         bot.sendMessage(
           chatId,
           `Successfully sent ${amount} Massa to ${recipientAddress}.`

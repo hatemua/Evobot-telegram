@@ -118,8 +118,13 @@ const EvolutionHistory = require("./models/Evolution");
 //   }
 // }
 
-async function evolveNFT(user, evolution) {
+async function evolveNFT(user, evolution,step,baseURI) {
   // Placeholder function for evolving an NFT
+  const ev=await EvolutionHistory.findOne({evolutionId: evolution.evolutionId,executed:true})
+  if(ev){
+return ev
+  }
+  
   console.log(
     `Evolving NFT for user with wallet address: ${user.walletAddress}`
   );
@@ -139,50 +144,67 @@ async function evolveNFT(user, evolution) {
 
     const smartContract = new SmartContract(
       provider,
-      "AS12XKoY1zPdi7Pw94FPnyobV7z94twb2UrTJSARMHGQ46DB4r2fR"
+      "AS12oHCfezLwT3JNZPndJ33rjxPcQzPUca6KGs5BJUUrKcgCUG3g5"
     );
+    console.log("evolutionID ",evolution.evolutionId)
+    console.log("step ",step)
 
-    const args = new Args()
-      .addString(evolution.evolutionId)
-      .addU256(BigInt(user.tokenId));
+
+    // const args = new Args()
+    //   .addString(evolution.evolutionId)
+    //   .addU256(BigInt(user.tokenId));
 
     // Call the transfer function on the smart contract
-    const operation = await smartContract.call("timeUpgrade", args, {
+    let imageArgs = new Args().addU256(BigInt(user.tokenId)).addString(`${baseURI}/${user.tokenId}.png`);
+    console.log(imageArgs);
+
+    const operation = await smartContract.call("setImage", imageArgs, {
       coins,
       fee,
       maxGas,
     });
-    console.log("step1");
+
+
+    
+    console.log(operation,"operation");
     await new Promise((resolve) => setTimeout(resolve, 16000));
+    const lastEvo=await EvolutionHistory.findOne({evolutionId:evolution.evolutionId})
+    lastEvo.executed= true;
+    await lastEvo.save();
+    if (step==4){
+      return;
+    }
+    // const evolutionId = uuidv4();
 
-    const evolutionId = uuidv4();
+    // const args1 = new Args()
+    //   .addString(evolutionId)
+    //   .addU256(BigInt(user.tokenId))
+    //   .addU64(BigInt(Date.now() + 2 * 60 * 1000))
+    //   .addArray(
+    //     [
+    //       "image",
+    //       `${baseURI}/${user.tokenId}.png`,
+    //     ],
+    //     ArrayTypes.STRING
+    //   );
+     
+    // const operation2 = await smartContract.call("addTimeEvolution", args1, {
+    //   coins: BigInt(4 * 10 ** 7),
+    //   fee,
+    //   maxGas,
+    // });
 
-    const args1 = new Args()
-      .addString(evolutionId)
-      .addU256(BigInt(user.tokenId))
-      .addU64(BigInt(Date.now() + 30 * 60 * 1000))
-      .addArray(
-        [
-          "image",
-          `https://gold-hilarious-platypus-698.mypinata.cloud/ipfs/QmWK6TaM2ELXEGScKRZVxvzAWjj2khR1MXdEBwcjFdPPRE/${user.tokenId}.png`,
-        ],
-        ArrayTypes.STRING
-      );
-
-    const operation2 = await smartContract.call("addTimeEvolution", args1, {
-      coins: BigInt(4 * 10 ** 7),
-      fee,
-      maxGas,
-    });
-
-    console.log(operation2.id);
+    // console.log(operation2.id,"add TimesEvolution");
+    // console.log(baseURI,"baseURI");
     // Save evolution history
+   
     const evolutionRecord = new EvolutionHistory({
       userId: user._id,
       evolutionId: evolutionId,
+      step:(step+1).toString()
     });
     await evolutionRecord.save();
-
+    
     return { tx1: operation.id, tx2: operation2.id };
   } catch (error) {
     console.error("Failed to mint Evobots:", error);
@@ -243,15 +265,44 @@ async function checkEvolutions() {
   const usersWithNFT = await User.find({ nftMinted: true }).exec();
   const now = new Date();
   for (const user of usersWithNFT) {
-    const evolution = await EvolutionHistory.findOne({
-      userId: user.id,
-    });
-    console.log("this is the evolution : ", evolution);
+   
+    console.log("this is the evolution : ");
     const timeSinceMint = (now - user.mintDate) / 60000; // time in minutes
-    if (timeSinceMint >= 3 && timeSinceMint < 6) {
-      await evolveNFT(user, evolution); // First evolution after 6 minutes
-    } else if (timeSinceMint >= 6) {
-      await evolveNFT(user, evolution); // Second evolution after 12 minutes
+    if (timeSinceMint >= 1 && timeSinceMint < 2) {
+      const evolution = await EvolutionHistory.findOne({
+        userId: user.id,
+        step: "1",
+        
+      });
+      await evolveNFT(user, evolution,1,"https://gold-hilarious-platypus-698.mypinata.cloud/ipfs/QmeVZ3otVuC4PnQDxMqU4BmdkEXmiQF7muBkEkj6uT6LPh"); // First evolution after 6 minutes
+      console.log("First evolution after 6 minutes")
+    } else if (timeSinceMint >= 2 && timeSinceMint < 4) {
+      const evolution = await EvolutionHistory.findOne({
+        userId: user.id,
+        step: "2",
+      });
+      await evolveNFT(user, evolution,2,"https://gold-hilarious-platypus-698.mypinata.cloud/ipfs/QmWK6TaM2ELXEGScKRZVxvzAWjj2khR1MXdEBwcjFdPPRE"); // Second evolution after 12 minutes
+      console.log("Second evolution after 12 minutes")
+
+    }
+    else if (timeSinceMint >= 4 && timeSinceMint < 6) {
+      const evolution = await EvolutionHistory.findOne({
+        userId: user.id,
+        step: "3"
+      });
+      await evolveNFT(user, evolution,3,"https://gold-hilarious-platypus-698.mypinata.cloud/ipfs/QmYgfBWLpvDsqRRfwxYtNEsWtzpE6V2f6VfsZo1i6334UK"); // Second evolution after 12 minutes
+      console.log("Second evolution after 16 minutes")
+
+    }
+    else if (timeSinceMint >= 6 && timeSinceMint < 8) {
+      const evolution = await EvolutionHistory.findOne({
+        userId: user.id,
+        step: "4",
+        transaction:true
+      });
+      await evolveNFT(user, evolution,4,"https://gold-hilarious-platypus-698.mypinata.cloud/ipfs/QmZYSVuevQCfXmgLDC3pUVCpnYnKHeKCmRZZmURkuXbcAr"); // Second evolution after 12 minutes
+      console.log("Second evolution after 18 minutes")
+
     }
   }
 }

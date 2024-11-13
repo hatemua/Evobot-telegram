@@ -9,7 +9,6 @@ const {
   bytesToStr,
   MAX_GAS_CALL,
 } = require("@massalabs/massa-web3");
-
 async function sendTransaction(privateKey, recipientAddress, amount) {
   const keyPair = await KeyPair.fromPrivateKey(privateKey);
   const provider = Web3Provider.buildnet(keyPair);
@@ -22,6 +21,7 @@ async function sendTransaction(privateKey, recipientAddress, amount) {
 
     const status = await tx.getStatus();
     console.log(`Transaction successful: ${tx.id}`);
+    
     return tx.hash;
   } catch (error) {
     console.error("Error sending transaction:", error);
