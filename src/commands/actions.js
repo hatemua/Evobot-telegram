@@ -110,18 +110,19 @@ async function handleVisualizeCameleonz(bot, chatId) {
       return;
     }
 
-    const cameleonzAddress =
-      "AS12wiYn88sQZ2ugC5YRQT9QAvAzYVfBuTtZqmkb6F4Y5qh7ZNeyM"; // Smart contract address for Cameleonz
+    // const cameleonzAddress =
+    //   "AS12wiYn88sQZ2ugC5YRQT9QAvAzYVfBuTtZqmkb6F4Y5qh7ZNeyM"; // Smart contract address for Cameleonz
 
-    const metadata = await getNfts(
-      bot,
-      chatId,
-      cameleonzAddress,
-      user.privateKey,
-      user.walletAddress
-    );
+    // const metadata = await getNfts(
+    //   bot,
+    //   chatId,
+    //   cameleonzAddress,
+    //   user.privateKey,
+    //   user.walletAddress
+    // );
 
-    const message = `Here is the NFT visualization feature for Cameleonz:\n\n${metadata}\n\nSelect an option or go back to the menu.`;
+    // const message = `Here is the NFT visualization feature for Cameleonz:\n\n${metadata}\n\nSelect an option or go back to the menu.`;
+    const message = `This wallet don't contain any cameleon to mint your Cameleon :\n\n Visit this website https://www.cameleon.art/\n\nSelect an option or go back to the menu.`;
 
     const options = {
       reply_markup: JSON.stringify({
