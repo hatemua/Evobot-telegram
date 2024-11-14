@@ -157,6 +157,22 @@ And explore more! \n\n
 
 // Function to handle sending Massa
 async function handleSendMassa(bot, chatId) {
+  const user = await User.findOne({ telegramId: chatId });
+  if (user.transactionSended == true) {
+    bot.sendMessage(
+      chatId,
+      "This functionnality is available only one time",
+      {
+        reply_markup: JSON.stringify({
+          inline_keyboard: [
+            [{ text: "🔙 Back to Menu", callback_data: "back_to_menu" }],
+          ],
+        }),
+      }
+    );
+  }
+  else{
+
   const options = {
     reply_markup: {
       inline_keyboard: [
@@ -170,12 +186,14 @@ async function handleSendMassa(bot, chatId) {
       ],
     },
   };
-
+ 
   bot.sendMessage(
     chatId,
     "How would you like to enter the recipient's address?",
     options
   );
+}
+
 }
 
 // Function to handle scanning a QR code for sending Massa
