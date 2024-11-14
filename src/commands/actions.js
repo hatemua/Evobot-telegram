@@ -124,8 +124,11 @@ async function handleVisualizeCameleonz(bot, chatId) {
     // );
 
     // const message = `Here is the NFT visualization feature for Cameleonz:\n\n${metadata}\n\nSelect an option or go back to the menu.`;
-    const message = `This wallet doesn’t hold any Cameleon to mint your Cameleon. 🦎 \n\n
-Visit https://www.cameleon.art/ to explore more!\n\nSelect an option or go back to the menu.`;
+    const message = `This wallet doesn’t hold any Cameleon.\n\n
+
+To mint your Cameleon 🦎 Visit https://www.cameleon.art/ \n\n
+And explore more! \n\n
+\n\nSelect an option or go back to the menu.`;
 
     const options = {
       reply_markup: JSON.stringify({
@@ -157,7 +160,6 @@ async function handleSendMassa(bot, chatId) {
   const options = {
     reply_markup: {
       inline_keyboard: [
-        [{ text: "Scan QR Code", callback_data: "send_massa_qr" }],
         [
           {
             text: "Enter Address Manually",
@@ -407,7 +409,7 @@ async function handleCheckBalance(bot, chatId) {
 
   try {
     const balance = await getBalance(user.privateKey, user.walletAddress); // Fetch the balance
-    bot.sendMessage(chatId, `Your current wallet balance is: ${10} Massa`);
+    bot.sendMessage(chatId, `Your current wallet balance is: ${10} MAS`);
   } catch (error) {
     console.error("Error fetching balance:", error);
     bot.sendMessage(
