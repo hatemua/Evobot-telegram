@@ -478,9 +478,9 @@ async function handleCheckBalance(bot, chatId) {
     // const balance = await getBalance(user.privateKey, user.walletAddress); // Fetch the balance
     const user = await User.findOne({ telegramId: chatId });
     if (user.transactionSended == true) {
-    bot.sendMessage(chatId, `Your current wallet balance is: ${10} MAS`);
-    } else {
     bot.sendMessage(chatId, `Your current wallet balance is: ${0} MAS`);
+    } else {
+    bot.sendMessage(chatId, `Your current wallet balance is: ${10} MAS`);
 
     }
   } catch (error) {
