@@ -180,45 +180,77 @@ async function handleSendMassa(bot, chatId) {
 
 // Function to handle scanning a QR code for sending Massa
 async function handleSendMassaQr(bot, chatId) {
-  bot.sendMessage(
-    chatId,
-    "Please send me the QR code of the address you want to send Massa to.",
-    {
-      reply_markup: JSON.stringify({
-        inline_keyboard: [
-          [{ text: "🔙 Back to Menu", callback_data: "back_to_menu" }],
-        ],
-      }),
-    }
-  );
+  const user = await User.findOne({ telegramId: chatId });
+  if (user.transactionSended == true) {
+    bot.sendMessage(
+      chatId,
+      "This functionnality is available only one time",
+      {
+        reply_markup: JSON.stringify({
+          inline_keyboard: [
+            [{ text: "🔙 Back to Menu", callback_data: "back_to_menu" }],
+          ],
+        }),
+      }
+    );
+  }
+  else{
+    bot.sendMessage(
+      chatId,
+      "Please send me the QR code of the address you want to send Massa to.",
+      {
+        reply_markup: JSON.stringify({
+          inline_keyboard: [
+            [{ text: "🔙 Back to Menu", callback_data: "back_to_menu" }],
+          ],
+        }),
+      }
+    );
+  }
+  
 
   // Listen for a photo (QR code) sent by the user
-  bot.on("photo", async (msg) => {
-    if (msg.chat.id !== chatId) return;
+  // bot.on("photo", async (msg) => {
+  //   if (msg.chat.id !== chatId) return;
 
-    const fileId = msg.photo[msg.photo.length - 1].file_id; // Get the highest resolution photo
-    const filePath = await bot.getFileLink(fileId);
+  //   const fileId = msg.photo[msg.photo.length - 1].file_id; // Get the highest resolution photo
+  //   const filePath = await bot.getFileLink(fileId);
 
-    // Download and decode the QR code image
-    const image = await Jimp.read(filePath);
-    const qr = new QrCodeReader();
-    qr.callback = async (err, value) => {
-      if (err || !value) {
-        bot.sendMessage(
-          chatId,
-          "Failed to decode the QR code. Please try again."
-        );
-      } else {
-        const recipientAddress = value.result;
-        await promptAmountAndSend(bot, chatId, recipientAddress); // Prompt for the amount and send
-      }
-    };
-    qr.decode(image.bitmap);
-  });
+  //   // Download and decode the QR code image
+  //   const image = await Jimp.read(filePath);
+  //   const qr = new QrCodeReader();
+  //   qr.callback = async (err, value) => {
+  //     if (err || !value) {
+  //       bot.sendMessage(
+  //         chatId,
+  //         "Failed to decode the QR code. Please try again."
+  //       );
+  //     } else {
+  //       const recipientAddress = value.result;
+  //       await promptAmountAndSend(bot, chatId, recipientAddress); // Prompt for the amount and send
+  //     }
+  //   };
+  //   qr.decode(image.bitmap);
+  // });
 }
 
 // Function to handle manual address entry for sending Massa
 async function handleSendMassaManual(bot, chatId) {
+  const user = await User.findOne({ telegramId: chatId });
+  if (user.transactionSended == true) {
+    bot.sendMessage(
+      chatId,
+      "This functionnality is available only one time",
+      {
+        reply_markup: JSON.stringify({
+          inline_keyboard: [
+            [{ text: "🔙 Back to Menu", callback_data: "back_to_menu" }],
+          ],
+        }),
+      }
+    );
+  }
+  else{
   bot.sendMessage(chatId, "Please enter the recipient's Massa address:");
 
   bot.onText(/.+/, async (msg) => {
@@ -228,9 +260,25 @@ async function handleSendMassaManual(bot, chatId) {
     }
   });
 }
+}
 
 // Helper function to prompt for the amount and send the transaction
 async function promptAmountAndSend(bot, chatId, recipientAddress) {
+  const user = await User.findOne({ telegramId: chatId });
+  if (user.transactionSended == true) {
+    bot.sendMessage(
+      chatId,
+      "This functionnality is available only one time",
+      {
+        reply_markup: JSON.stringify({
+          inline_keyboard: [
+            [{ text: "🔙 Back to Menu", callback_data: "back_to_menu" }],
+          ],
+        }),
+      }
+    );
+  }
+  else{
   bot.sendMessage(chatId, "Please enter the amount of Massa to send:");
 
   bot.onText(/^[0-9]+(\.[0-9]+)?$/, async (msg) => {
@@ -268,6 +316,7 @@ async function promptAmountAndSend(bot, chatId, recipientAddress) {
       }
     }
   });
+}
 }
 
 // Function to handle receiving Massa
@@ -408,8 +457,14 @@ async function handleCheckBalance(bot, chatId) {
   }
 
   try {
-    const balance = await getBalance(user.privateKey, user.walletAddress); // Fetch the balance
+    // const balance = await getBalance(user.privateKey, user.walletAddress); // Fetch the balance
+    const user = await User.findOne({ telegramId: chatId });
+    if (user.transactionSended == true) {
     bot.sendMessage(chatId, `Your current wallet balance is: ${10} MAS`);
+    } else {
+    bot.sendMessage(chatId, `Your current wallet balance is: ${0} MAS`);
+
+    }
   } catch (error) {
     console.error("Error fetching balance:", error);
     bot.sendMessage(
